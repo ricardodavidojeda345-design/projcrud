@@ -1,36 +1,28 @@
 <?php
-
-$nome = $_POST["nome"];
+$id       = $_POST["id"];
+$nome     = $_POST["nome"];
 $categoria = $_POST["categoria"];
 $descricao = $_POST["descricao"];
-$link = $_POST["link"];
-$gratuita = $_POST["gratuita"];
+$link     = $_POST["link"];
+$gratuita = isset($_POST["gratuita"]) ? 1 : 0;
 
 
-$sql = "update posts 
-set nome=:nome, categoria=:categoria, descricao=:descricao, link=:link, gratuita=:gratuita
-where id=:id;";
 
-
+$sql = "UPDATE ferramentas 
+        SET nome=:nome, categoria=:categoria, descricao=:descricao, link=:link, gratuita=:gratuita
+        WHERE id=:id";
+        
 $pdo = new PDO("sqlite:banco.db");
 
-
 $stmt = $pdo->prepare($sql);
-
-
-
+$stmt->bindValue(':id', $id);
 $stmt->bindValue(':nome', $nome);
 $stmt->bindValue(':categoria', $categoria);
 $stmt->bindValue(':descricao', $descricao);
 $stmt->bindValue(':link', $link);
 $stmt->bindValue(':gratuita', $gratuita);
+$stmt->execute();
 
-
-
-$stmt->execute(); 
-
-?>
-
-<?php
-require "listagem-posts.php"
+header("Location: index.php");
+exit;
 ?>
